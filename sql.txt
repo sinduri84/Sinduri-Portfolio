@@ -1,0 +1,46 @@
+create table Comments (
+comment_id int unsigned not null auto_increment primary key,
+title varchar(300) not null,
+comment varchar(65535) not null,
+post_date TIMESTAMP default CURRENT_TIMESTAMP,
+fk_user_id int unsigned not null,
+fk_blog_id int unsigned not null,
+approved enum('yes', 'no') not null default 'no'
+);
+
+create table likesBlog (
+like_id int unsigned not null auto_increment primary key,
+post_date TIMESTAMP default CURRENT_TIMESTAMP,
+fk_user_like_id int unsigned not null,
+fk_blog_like_id int unsigned not null,
+likeit enum('like', 'dislike')
+);
+
+create table Blog (
+blog_id int unsigned not null auto_increment primary key,
+title varchar(300) not null,
+contentt varchar(65535) not null,
+create_date TIMESTAMP default CURRENT_TIMESTAMP,
+approved enum('yes', 'no') not null default 'no',
+fk_poster_id int unsigned not null);
+
+ALTER TABLE comments
+ADD FOREIGN KEY (fk_user_id) REFERENCES users(user_id) ON DELETE CASCADE;
+ADD FOREIGN KEY (fk_blog_id) REFERENCES blog(blog_id) ON DELETE CASCADE;
+
+ALTER TABLE blog
+ADD FOREIGN KEY (fk_poster_id) REFERENCES users(user_id) ON DELETE SET NULL;
+
+create table tags
+(tag_id int unsigned not null auto_increment primary key,
+tag_title varchar(100));
+
+create table tagmap
+(tag_map_id int unsigned not null auto_increment primary key,
+fk_tag_id int unsigned not null,
+fk_blog_id int unsigned not null);
+
+ALTER TABLE tagmap
+ADD FOREIGN KEY (fk_tag_id) REFERENCES tags(tag_id) ON DELETE CASCADE,
+ADD FOREIGN KEY (fk_blog_id) REFERENCES blog(blog_id) ON DELETE CASCADE;
+
